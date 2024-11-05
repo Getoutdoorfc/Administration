@@ -1,0 +1,75 @@
+/* Tilpasning af admin-styling */
+
+/* Generelle stilarter */
+body.administration-admin {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+}
+
+/* Dashboard-stilarter */
+.administration-dashboard {
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.administration-dashboard h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.administration-dashboard p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Formular-stilarter */
+.administration-form {
+  margin-top: 20px;
+}
+
+.administration-form input[type="text"],
+.administration-form input[type="password"],
+.administration-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.administration-form button {
+  padding: 10px 20px;
+  background-color: #0073aa;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.administration-form button:hover {
+  background-color: #005177;
+}
+
+.administration-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.administration-stat-box {
+  background: #f1f1f1;
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+}
+
+.administration-quick-actions {
+  margin-top: 40px;
+}
+
+.administration-quick-actions .button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
