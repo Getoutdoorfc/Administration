@@ -1,2 +1,0 @@
-# Administration
-Mit plugin
