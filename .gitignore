@@ -9,3 +9,5 @@ node_modules/
 vendor/
 # ignore intelphense
 intelephense/
+# ignore settings med intelphense
+.vscode\settings.json
