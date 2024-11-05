@@ -1,0 +1,11 @@
+# Ignorer .vscode-mappen og alle dens filer
+.vscode/
+
+# Ignorer WordPress core
+wordpress-core/
+
+# Ignorer node_modules og vendor mapper
+node_modules/
+vendor/
+# ignore intelphense
+intelephense/
