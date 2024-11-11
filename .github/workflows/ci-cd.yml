@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Tjekker kode ud fra main-branch
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Opsætter PHP med relevante extensions
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,16 +25,27 @@ jobs:
           extensions: mbstring, xml, intl
           tools: composer
 
+      # Installerer alle afhængigheder inklusive udviklingsværktøjer
       - name: Install dependencies
         run: composer install --no-progress --no-suggest --prefer-dist
 
-      - name: Run PHP CodeSniffer and Fix
+      # Kører PHP CodeSniffer for at kontrollere kodestandarder
+      - name: Run PHP CodeSniffer
         run: |
-          ./vendor/bin/phpcbf --standard=your_custom_standard.xml src/ || true  # Retter fejl automatisk
-        continue-on-error: true  # Fortsæt selv hvis der er uløste fejl
+          ./vendor/bin/phpcs --standard=your_custom_standard.xml src/ || true
 
+      # Anvender PHP CodeSniffer til at rette fejl automatisk, hvis det er muligt
+      - name: Run PHP CodeSniffer and Fix
+        run: ./vendor/bin/phpcbf --standard=your_custom_standard.xml src/
+        continue-on-error: true
+
+      # Kører PHPUnit tests for at sikre koden fungerer korrekt
       - name: Run PHPUnit Tests
         run: ./vendor/bin/phpunit --testdox
+
+      # Genererer dokumentation med phpDocumentor
+      - name: Generate Documentation with phpDocumentor
+        run: ./vendor/bin/phpdoc -d src -t docs
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,6 +55,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Installerer kun produktionsafhængigheder for at reducere mængden af filer
+      - name: Install only production dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      # Fjerner dokumentation og udviklingsfiler for at lette deployment
+      - name: Cleanup unnecessary files
+        run: |
+          rm -rf docs/  # Fjern dokumentation
+          rm -rf tests/  # Fjern testfiler
+          rm -rf .github/ # Fjern GitHub Actions konfiguration
+
+      # Uploader filerne til FTP-serveren
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
