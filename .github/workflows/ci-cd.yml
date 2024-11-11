@@ -1,0 +1,48 @@
+name: CI/CD Pipeline with Deployment
+
+on:
+  push:
+    branches:
+      - main  # Kører workflow på main-branch pushes
+  pull_request:
+    branches:
+      - main  # Kører workflow ved pull requests mod main
+
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, xml, intl
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+
+      - name: Run PHPUnit Tests
+        run: ./vendor/bin/phpunit --testdox
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: php-tests  # Deploy kun hvis tests består
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: "./C:/Users/sunee/OneDrive - Get Outdoor/public_html/administration"
+          remote-dir: "/staging/wp-content/plugins"
+          git-ftp-args: --auto-init
