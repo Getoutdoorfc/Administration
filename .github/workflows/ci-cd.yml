@@ -45,7 +45,8 @@ jobs:
 
       # Genererer dokumentation med phpDocumentor
       - name: Generate Documentation with phpDocumentor
-        run: ./vendor/bin/phpdoc -d src -t docs
+        run: |
+          php phpDocumentor.phar -d Administration -t docs/
 
   deploy:
     runs-on: ubuntu-latest
