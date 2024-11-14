@@ -1,0 +1,9 @@
+parameters:
+    level: 1
+    paths:
+        - Components/AdminInterface/
+    excludePaths:
+        - tests/*
+
+    bootstrapFiles:
+        - bootstrap.php

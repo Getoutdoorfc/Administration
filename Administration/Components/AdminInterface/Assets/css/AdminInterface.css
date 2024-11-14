@@ -1,0 +1,19 @@
+/* AdminInterface.css */
+.microsoft-setup-input.invalid {
+  border-color: #dc3232; /* WordPress error color */
+  background-color: #fbeaea;
+}
+
+.validation-error {
+  color: #dc3232;
+  margin-top: 5px;
+}
+
+.microsoft-setup-input:focus {
+  border-color: #007cba; /* WordPress focus color */
+}
+
+.microsoft-setup-input {
+  width: 100%;
+  max-width: 400px;
+}

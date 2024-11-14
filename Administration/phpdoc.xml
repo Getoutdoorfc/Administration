@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>Administration</title>
+    <paths>
+        <directory>.</directory>
+        <ignore>vendor/</ignore>
+        <ignore>tests/</ignore>
+        <ignore>.vscode/</ignore>
+    </paths>
+    <target>docs</target>
+    
+    <parser>
+        <visibility>public</visibility>
+        <cache>cache</cache>
+        <defaultpackagename>Administration</defaultpackagename>
+    </parser>
+    
+    <transformer>
+        <sourcecode>true</sourcecode>
+    </transformer>
+
+</phpdoc>

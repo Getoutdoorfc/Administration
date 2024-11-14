@@ -1,0 +1,5 @@
+
+msgid "Get Indoor"
+msgstr "Get Indoor"
+
+# ...additional translations...
