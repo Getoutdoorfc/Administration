@@ -7,16 +7,16 @@ defined( 'ABSPATH' ) || exit;
  * Class Deactivation
  *
  * Håndterer deaktiveringslogik for pluginet.
- *
- * @package Administration\Includes
  */
 class Deactivation {
-
     /**
      * Kører ved deaktivering af pluginet.
      */
     public static function deactivate() {
-        // Ryd midlertidige data eller stop planlagte begivenheder.
+        // Rydder planlagte cron-jobs.
         wp_clear_scheduled_hook( 'administration_custom_cron_event' );
+
+        // Log deaktivering.
+        error_log( 'Administration plugin deactivated: scheduled events cleared.' );
     }
 }

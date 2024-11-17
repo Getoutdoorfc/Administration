@@ -1,23 +1,43 @@
 <?php
-// phpstan-bootstrap.php
 
-// Definerer WordPress-konstanter, hvis de ikke allerede er defineret
+// Sikrer, at filen ikke kan tilgås direkte.
 if ( ! defined( 'ABSPATH' ) ) {
-    define( 'ABSPATH', __DIR__ . '/' );
+    exit; // Exit if accessed directly.
 }
 
-// Inkluderer Composer autoloader
+// Inkluderer Composer autoloader.
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Mock WordPress-funktioner, som PHPStan ellers ikke finder
-if ( ! function_exists( 'add_action' ) ) {
-    function add_action( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
-        // Dummy-implementering
+// Definerer plugin-konstanter.
+define( 'ADMINISTRATION_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'ADMINISTRATION_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+// Brug nødvendige namespaces.
+use Administration\Includes\Main;
+use Administration\Components\Utilities\Logger;
+
+/**
+ * Initialiserer pluginet ved at køre den primære klasse.
+ */
+function administration_initialize_plugin() {
+    if ( class_exists( Main::class ) ) {
+        try {
+            $plugin = new Main();
+            $plugin->run();
+        } catch ( Exception $e ) {
+            if ( class_exists( Logger::class ) ) {
+                Logger::getInstance()->error( 'Plugin initialization failed: ' . $e->getMessage(), [
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
+        }
+    } else {
+        // Håndter fejl, hvis Main-klassen ikke findes.
+        if ( class_exists( Logger::class ) ) {
+            Logger::getInstance()->error( 'Plugin initialization failed: Main class not found.' );
+        }
     }
 }
 
-if ( ! function_exists( 'add_filter' ) ) {
-    function add_filter( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
-        // Dummy-implementering
-    }
-}
+// Hook til WordPress "plugins_loaded".
+add_action( 'plugins_loaded', 'administration_initialize_plugin' );

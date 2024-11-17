@@ -1,66 +1,37 @@
 <?php
+
 namespace Administration\Includes;
 
-use Administration\Includes\Loader;
 use Administration\Components\AdminInterface\Menu;
+use Administration\Components\Utilities\Logger;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
- * Class Administration
- *
- * Hovedklasse for pluginet, initialiserer nødvendige funktioner og hooks.
- *
- * @package Administration\Includes
+ * Main class for plugin control.
  */
 class Main {
-
-    /**
-     * Loader instans.
-     *
-     * @var Loader
-     */
     protected $loader;
+    private $logger;
 
-    /**
-     * Constructor.
-     */
     public function __construct() {
-        error_log('Main::__construct called');
-        $this->loadDependencies();
-        $this->defineAdminHooks();
-        $this->definePublicHooks();
-    }
-
-    /**
-     * Indlæser afhængighederne for pluginet.
-     */
-    private function loadDependencies() {
+        $this->logger = Logger::getInstance();
         $this->loader = new Loader();
     }
 
-    /**
-     * Definerer hooks og filtre til admin-området.
-     */
     private function defineAdminHooks() {
-        error_log('Main::defineAdminHooks called');
-        // Registrer handlinger og filtre for admin-området
         $menu = new Menu();
+        $this->loader->add_action('admin_menu', $menu, 'register_menus');
     }
 
-    /**
-     * Definerer hooks og filtre til frontend.
-     */
     private function definePublicHooks() {
-        error_log('Main::definePublicHooks called');
-        // Registrer handlinger og filtre for frontend
+        // Placeholder for future public hooks
     }
 
-    /**
-     * Kører loaderen for at eksekvere alle hooks med WordPress.
-     */
     public function run() {
-        error_log('Main::run called');
+        $this->defineAdminHooks();
+        $this->definePublicHooks();
         $this->loader->run();
+        $this->logger->info('Plugin initialized successfully.');
     }
 }

@@ -244,5 +244,5 @@ final class Logger {
     /**
      * Prevent unserialization of the Singleton instance.
      */
-    private function __wakeup() {}
+    public function __wakeup() {}
 }

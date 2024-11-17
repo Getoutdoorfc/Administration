@@ -2,6 +2,7 @@
 namespace Administration\Components\AdminInterface\Templates;
 
 use Administration\Components\Integrations\MicrosoftGraph\Auth;
+use Administration\Components\AdminInterface\Templates\MicrosoftSetupGuide;
 
 defined('ABSPATH') || exit;
 
@@ -15,20 +16,29 @@ defined('ABSPATH') || exit;
 class MicrosoftSetupPage {
 
     public function render_setup_page() {
+        error_log('Rendering Microsoft Setup Page');
         if (!current_user_can('manage_options')) {
             wp_die(__('You do not have permission to access this page.', 'administration'));
         }
 
-        // Enqueue scripts and styles
-        wp_enqueue_script('administration-admin-interface-js', plugin_dir_url(__DIR__) . '../../Assets/js/AdminInterface.js', array('jquery'), '1.0', true);
-        wp_enqueue_style('administration-admin-interface-css', plugin_dir_url(__DIR__) . '../../Assets/css/AdminInterface.css', array(), '1.0');
+        wp_enqueue_script(
+            'administration-admin-interface-js',
+            plugins_url('Administration/Components/AdminInterface/Assets/js/AdminInterface.js', __DIR__),
+            array('jquery'),
+            '1.0',
+            true
+        );
 
-        // Retrieve settings
+        wp_enqueue_style(
+            'administration-admin-interface-css',
+            plugins_url('Administration/Components/AdminInterface/Assets/css/AdminInterface.css', __DIR__),
+            array(),
+            '1.0'
+        );
+
         $client_id = get_option('administration_microsoft_client_id', '');
         $tenant_id = get_option('administration_microsoft_tenant_id', '');
-        $credentials_saved = !empty($client_id) && !empty($tenant_id);
 
-        // Capture settings errors
         $errors = get_settings_errors('administration_microsoft_options');
         $field_errors = array();
         if (!empty($errors)) {
@@ -42,10 +52,11 @@ class MicrosoftSetupPage {
             <h1><?php esc_html_e('Microsoft Opsætning', 'administration'); ?></h1>
             <?php settings_errors('administration_microsoft_options'); ?>
 
+            <?php MicrosoftSetupGuide::render_guide(); ?>
+
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <?php wp_nonce_field('administration_microsoft_options_verify'); ?>
                 <input type="hidden" name="action" value="administration_microsoft_setup">
-
                 <table class="form-table">
                     <?php
                     $fields = [
@@ -95,7 +106,6 @@ class MicrosoftSetupPage {
                                 <?php endif; ?>
                                 <p class="validation-error">
                                     <?php
-                                    // Display field-specific errors
                                     if (!empty($field_errors)) {
                                         foreach ($field_errors as $error) {
                                             if (strpos($error, $field['label']) !== false) {
@@ -113,14 +123,12 @@ class MicrosoftSetupPage {
                 <?php submit_button(__('Save Settings', 'administration'), 'primary', 'administration_microsoft_submit'); ?>
             </form>
 
-            <?php if ($credentials_saved) : ?>
-                <hr>
-                <h2><?php esc_html_e('Microsoft OAuth 2.0 Authorization', 'administration'); ?></h2>
-                <p><?php esc_html_e('Click the button below to log in with Microsoft and authorize the application.', 'administration'); ?></p>
-                <a href="<?php echo esc_url(Auth::getInstance()->getAuthorizationUrl()); ?>" class="button button-primary">
-                    <?php esc_html_e('Log in with Microsoft', 'administration'); ?>
-                </a>
-            <?php endif; ?>
+            <hr>
+            <h2><?php esc_html_e('Microsoft OAuth 2.0 Authorization', 'administration'); ?></h2>
+            <p><?php esc_html_e('Click the button below to log in with Microsoft and authorize the application.', 'administration'); ?></p>
+            <a href="<?php echo esc_url(Auth::getInstance()->getAuthorizationUrl()); ?>" class="button button-primary">
+                <?php esc_html_e('Log in with Microsoft', 'administration'); ?>
+            </a>
         </div>
         <?php
     }

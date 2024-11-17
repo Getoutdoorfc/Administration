@@ -1,6 +1,6 @@
 {
   "name": "getoutdoor/administration",
-  "description": "A WordPress plugin for integrating Microsoft services and calendar management",
+  "description": "A WordPress plugin for integrating Microsoft services and calendar management.",
   "type": "project",
   "license": "GPL-2.0",
   "authors": [
@@ -12,27 +12,20 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=8.1",
-    "microsoft/microsoft-graph": "^1.0"
+    "symfony/polyfill-ctype": "^1.31"
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.0",
+    "phpstan/phpstan": "^1.10",
     "wp-coding-standards/wpcs": "^3.0",
-    "squizlabs/php_codesniffer": "^3.6",
-    "phpunit/phpunit": "^9.5",
-    "icanhazstring/composer-unused": "^0.8.3"
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpunit/phpunit": "^10.0",
+    "icanhazstring/composer-unused": "^0.8"
   },
   "autoload": {
     "psr-4": {
       "Administration\\Includes\\": "Includes/",
-      "Administration\\Components\\AdminInterface\\": "Components/AdminInterface/",
-      "Administration\\Components\\AdminInterface\\Templates\\": "Components/AdminInterface/Templates",
-      "Administration\\Components\\Integrations\\MicrosoftGraph\\": "Components/Integrations/MicrosoftGraph/",
-      "Administration\\Components\\Integrations\\Woocommerce\\": "Components/Integrations/Woocommerce/",
-      "Administration\\Components\\ProductTypes\\": "Components/ProductTypes/",
-      "Administration\\Components\\ProductTypes\\Rentals\\": "Components/ProductTypes/Rentals/",
-      "Administration\\Components\\ProductTypes\\Experiences\\": "Components/ProductTypes/Experiences/",
-      "Administration\\Components\\Utilities\\": "Components/Utilities/",
-      "Administration\\": ""
+      "Administration\\Components\\": "Components/",
+      "Administration\\Utilities\\": "Utilities/"
     }
   },
   "autoload-dev": {
@@ -46,12 +39,16 @@
     ],
     "phpcs": "vendor/bin/phpcs",
     "phpstan": "vendor/bin/phpstan analyse",
-    "phpunit": "vendor/bin/phpunit"
+    "phpunit": "vendor/bin/phpunit",
+    "test": [
+      "@phpcs",
+      "@phpstan",
+      "@phpunit"
+    ]
   },
   "config": {
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "symfony/flex": true
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }
