@@ -12,20 +12,22 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=8.1",
-    "symfony/polyfill-ctype": "^1.31"
+    "microsoft/microsoft-graph": "^2.0",
+    "symfony/polyfill-php82": "^1.31"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.10",
     "wp-coding-standards/wpcs": "^3.0",
     "squizlabs/php_codesniffer": "^3.7",
     "phpunit/phpunit": "^10.0",
-    "icanhazstring/composer-unused": "^0.8"
+    "icanhazstring/composer-unused": "^0.8",
+    "rector/rector": "*"
   },
   "autoload": {
     "psr-4": {
       "Administration\\Includes\\": "Includes/",
-      "Administration\\Components\\": "Components/",
-      "Administration\\Utilities\\": "Utilities/"
+      "Administration\\Modules\\": "Modules/",
+      "Administration\\Utilities\\": "Core/"
     }
   },
   "autoload-dev": {
@@ -48,7 +50,9 @@
   },
   "config": {
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "php-http/discovery": true,
+      "tbachert/spi": true
     }
   }
 }
