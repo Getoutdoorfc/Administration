@@ -5,8 +5,10 @@ namespace Administration\Modules\MicrosoftGraph\MicrosoftCore;
 use Administration\Components\Utilities\ConfigHandler;
 use Administration\Components\Utilities\Crypto;
 use Administration\Components\Utilities\Logger;
-C:\public_html\Administration\Modules\MicrosoftGraph\MicrosoftCore\TokenHandler.php
-defined('ABSPATH') || exit;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 /**
  * Class TokenHandler
