@@ -1,14 +1,13 @@
 <?php
-namespace Administration\Components\Utilities;
+namespace Administration\Core\Managers;
 
-use Administration\Components\Utilities\Validation;
 use Administration\Components\Utilities\Crypto;
-use Administration\Components\Utilities\Logger;
+use Administration\Core\Managers\LoggerManager;
 
 defined('ABSPATH') || exit;
 
 /**
- * Class AjaxHandlers
+ * Class AjaxManager
  *
  * Håndterer AJAX-anmodninger for forskellige dele af pluginet.
  *
@@ -18,9 +17,9 @@ defined('ABSPATH') || exit;
  * - Håndtering af gemte Microsoft-indstillinger.
  * - Generering af en generisk knap uden logik.
  *
- * @package Administration\Components\Utilities
+ * @package Administration\Core\Managers
  */
-class AjaxHandlers {
+class AjaxManager {
 
     /**
      * Constructor
@@ -121,4 +120,4 @@ class AjaxHandlers {
 }
 
 // Initialiser klassen
-new AjaxHandlers();
+new AjaxManager();

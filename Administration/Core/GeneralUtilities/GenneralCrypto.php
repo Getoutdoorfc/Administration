@@ -1,9 +1,9 @@
 <?php
 
-namespace Administration\Components\Utilities;
+namespace Administration\Core\GeneralUtilities;
 
-use Administration\Components\Utilities\Logger;
-use Administration\Components\Utilities\ConfigHandler;
+use Administration\Core\Managers\LoggerManager;
+use Administration\Core\GeneralHandlers\WpConfigHandler;
 
 defined('ABSPATH') || exit;
 
@@ -24,7 +24,7 @@ defined('ABSPATH') || exit;
  * Anbefaling:
  * Denne klasse er designet til generisk brug og kan genbruges til andre krypteringsbehov uden at være låst til Microsoft-integration.
  */
-class Crypto {
+class GenneralCrypto {
 
     /**
      * Genererer en sikker krypteringsnøgle baseret på konfigurationsindstillinger.
@@ -38,13 +38,13 @@ class Crypto {
      * @throws \Exception Hvis krypteringsnøglen ikke kan genereres.
      */
     private static function get_encryption_key(): string {
-        Logger::getInstance()->info('Fetching encryption key...');
+        LoggerManager::getInstance()->info('Fetching encryption key...');
 
-        $secret_key = ConfigHandler::get_config('secret_key');
-        $salt = ConfigHandler::get_config('encryption_salt');
+        $secret_key = WpConfigHandler::get_config('secret_key');
+        $salt = WpConfigHandler::get_config('encryption_salt');
 
         if (empty($secret_key) || empty($salt)) {
-            Logger::getInstance()->error('Encryption key or salt is missing in configuration.');
+            LoggerManager::getInstance()->error('Encryption key or salt is missing in configuration.');
             throw new \Exception('Encryption key or salt is not properly configured.');
         }
 
@@ -52,11 +52,11 @@ class Crypto {
         $key = hash('sha256', wp_salt('auth') . $secret_key . $salt, true);
 
         if (!$key) {
-            Logger::getInstance()->critical('Failed to generate encryption key.');
+            LoggerManager::getInstance()->critical('Failed to generate encryption key.');
             throw new \Exception('Encryption key generation failed.');
         }
 
-        Logger::getInstance()->info('Encryption key successfully generated.');
+        LoggerManager::getInstance()->info('Encryption key successfully generated.');
         return $key;
     }
 
@@ -68,11 +68,11 @@ class Crypto {
      */
     public static function encrypt_data(string $data) {
         if (empty($data)) {
-            Logger::getInstance()->error('Encryption failed: Input data is empty.');
+            LoggerManager::getInstance()->error('Encryption failed: Input data is empty.');
             return false;
         }
 
-        Logger::getInstance()->info('Encrypting data...');
+        LoggerManager::getInstance()->info('Encrypting data...');
         try {
             $encryption_key = self::get_encryption_key();
             $iv_length = openssl_cipher_iv_length('aes-256-cbc');
@@ -89,10 +89,10 @@ class Crypto {
             }
 
             $result = base64_encode($iv . $encrypted);
-            Logger::getInstance()->info('Data successfully encrypted.');
+            LoggerManager::getInstance()->info('Data successfully encrypted.');
             return $result;
         } catch (\Exception $e) {
-            Logger::getInstance()->critical('Encryption failed: ' . $e->getMessage());
+            LoggerManager::getInstance()->critical('Encryption failed: ' . $e->getMessage());
             return false;
         }
     }
@@ -105,11 +105,11 @@ class Crypto {
      */
     public static function decrypt_data(string $data) {
         if (empty($data)) {
-            Logger::getInstance()->error('Decryption failed: Input data is empty.');
+            LoggerManager::getInstance()->error('Decryption failed: Input data is empty.');
             return false;
         }
 
-        Logger::getInstance()->info('Decrypting data...');
+        LoggerManager::getInstance()->info('Decrypting data...');
         try {
             $encryption_key = self::get_encryption_key();
             $decoded_data = base64_decode($data, true);
@@ -132,10 +132,10 @@ class Crypto {
                 throw new \Exception('Decryption process failed.');
             }
 
-            Logger::getInstance()->info('Data successfully decrypted.');
+            LoggerManager::getInstance()->info('Data successfully decrypted.');
             return $decrypted;
         } catch (\Exception $e) {
-            Logger::getInstance()->critical('Decryption failed: ' . $e->getMessage());
+            LoggerManager::getInstance()->critical('Decryption failed: ' . $e->getMessage());
             return false;
         }
     }

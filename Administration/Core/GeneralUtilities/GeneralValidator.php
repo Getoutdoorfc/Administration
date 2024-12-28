@@ -1,8 +1,8 @@
 <?php
 
-namespace Administration\Components\Utilities;
+namespace Administration\Core\GeneralUtilities;
 
-use Administration\Components\Utilities\Logger;
+use Administration\Core\Managers\LoggerManager;
 
 defined('ABSPATH') || exit;
 
@@ -21,7 +21,7 @@ class GeneralValidator {
      * @return bool True hvis gyldig, ellers false.
      */
     public static function validate_format(string $value, string $pattern): bool {
-        Logger::getInstance()->info('Validating format of the value...');
+        LoggerManager::getInstance()->info('Validating format of the value...');
         return preg_match($pattern, $value) === 1;
     }
 
@@ -33,7 +33,7 @@ class GeneralValidator {
      */
     public static function is_empty($value): bool {
         $trimmed = trim((string)$value);
-        Logger::getInstance()->info('Checking if value is empty...', ['value_length' => strlen($trimmed)]);
+        LoggerManager::getInstance()->info('Checking if value is empty...', ['value_length' => strlen($trimmed)]);
         return empty($trimmed);
     }
 
@@ -44,7 +44,7 @@ class GeneralValidator {
      * @return string Saniteret input.
      */
     public static function sanitize_input(string $input): string {
-        Logger::getInstance()->info('Sanitizing input...');
+        LoggerManager::getInstance()->info('Sanitizing input...');
         return sanitize_text_field($input);
     }
 }

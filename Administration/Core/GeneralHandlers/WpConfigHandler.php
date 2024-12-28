@@ -2,10 +2,8 @@
 
 namespace Administration\Core\GeneralHandlers;
 
-use Administration\Components\Utilities\Crypto;
-use Administration\Components\Utilities\Logger;
-C:\public_html\Administration\Core\GeneralHandlers\WpConfigHandler.php
-defined('ABSPATH') || exit;
+use Administration\Core\GeneralUtilities\GenneralCrypto;
+use Administration\Core\Managers\LoggerManager;
 
 /**
  * Class WpConfigHandler
@@ -19,6 +17,10 @@ defined('ABSPATH') || exit;
  * - Sikrer, at krypterede værdier kan hentes og gemmes sikkert.
  * - Logger alle relevante handlinger og fejl.
  */
+
+defined('ABSPATH') || exit;
+
+
 class WpConfigHandler {
 
     /**
@@ -29,23 +31,23 @@ class WpConfigHandler {
      */
     public static function get_config($key) {
         $config = [
-            'microsoft_client_id' => defined('MICROSOFT_CLIENT_ID') ? Crypto::decrypt_data(MICROSOFT_CLIENT_ID) : null,
-            'microsoft_client_secret' => defined('MICROSOFT_CLIENT_SECRET') ? Crypto::decrypt_data(MICROSOFT_CLIENT_SECRET) : null,
-            'microsoft_tenant_id' => defined('MICROSOFT_TENANT_ID') ? Crypto::decrypt_data(MICROSOFT_TENANT_ID) : null,
+            'microsoft_client_id' => defined('MICROSOFT_CLIENT_ID') ? GenneralCrypto::decrypt_data(MICROSOFT_CLIENT_ID) : null,
+            'microsoft_client_secret' => defined('MICROSOFT_CLIENT_SECRET') ? GenneralCrypto::decrypt_data(MICROSOFT_CLIENT_SECRET) : null,
+            'microsoft_tenant_id' => defined('MICROSOFT_TENANT_ID') ? GenneralCrypto::decrypt_data(MICROSOFT_TENANT_ID) : null,
             'secret_key' => defined('PLUGIN_SECRET_KEY') ? PLUGIN_SECRET_KEY : null,
             'encryption_salt' => defined('PLUGIN_ENCRYPTION_SALT') ? PLUGIN_ENCRYPTION_SALT : null,
         ];
 
         if (!array_key_exists($key, $config)) {
-            Logger::getInstance()->error("Attempted to access undefined configuration key: {$key}");
+            LoggerManager::getInstance()->error("Attempted to access undefined configuration key: {$key}");
             return null;
         }
 
         $value = $config[$key];
         if ($value === null) {
-            Logger::getInstance()->warning("Configuration value for key {$key} is null or missing.");
+            LoggerManager::getInstance()->warning("Configuration value for key {$key} is null or missing.");
         } else {
-            Logger::getInstance()->info("Retrieved configuration value for key: {$key}");
+            LoggerManager::getInstance()->info("Retrieved configuration value for key: {$key}");
         }
 
         return $value;
@@ -60,21 +62,21 @@ class WpConfigHandler {
      */
     public static function set_constant($key, $value) {
         if (!is_string($key) || !is_string($value)) {
-            Logger::getInstance()->error("Invalid key or value for setting constant: {$key}");
+            LoggerManager::getInstance()->error("Invalid key or value for setting constant: {$key}");
             return false;
         }
 
         $wp_config_path = ABSPATH . 'wp-config.php';
 
         if (!file_exists($wp_config_path)) {
-            Logger::getInstance()->critical("wp-config.php not found at expected path: {$wp_config_path}");
+            LoggerManager::getInstance()->critical("wp-config.php not found at expected path: {$wp_config_path}");
             return false;
         }
 
         // Krypter værdien før lagring
-        $encrypted_value = Crypto::encrypt_data($value);
+        $encrypted_value = GenneralCrypto::encrypt_data($value);
         if ($encrypted_value === false) {
-            Logger::getInstance()->error("Failed to encrypt value for key: {$key}");
+            LoggerManager::getInstance()->error("Failed to encrypt value for key: {$key}");
             return false;
         }
 
@@ -83,18 +85,18 @@ class WpConfigHandler {
 
         // Undgå duplikering af nøgler
         if (strpos($file_contents, $key) !== false) {
-            Logger::getInstance()->warning("Constant {$key} already defined in wp-config.php.");
+            LoggerManager::getInstance()->warning("Constant {$key} already defined in wp-config.php.");
             return false;
         }
 
         $file_contents .= PHP_EOL . $constant_declaration . PHP_EOL;
 
         if (file_put_contents($wp_config_path, $file_contents) !== false) {
-            Logger::getInstance()->info("Successfully added constant {$key} to wp-config.php.");
+            LoggerManager::getInstance()->info("Successfully added constant {$key} to wp-config.php.");
             return true;
         }
 
-        Logger::getInstance()->critical("Failed to write constant {$key} to wp-config.php.");
+        LoggerManager::getInstance()->critical("Failed to write constant {$key} to wp-config.php.");
         return false;
     }
 
@@ -109,12 +111,12 @@ class WpConfigHandler {
         foreach ($required_keys as $key) {
             $value = self::get_config($key);
             if (empty($value)) {
-                Logger::getInstance()->error("Missing required configuration: {$key}");
+                LoggerManager::getInstance()->error("Missing required configuration: {$key}");
                 return false;
             }
         }
 
-        Logger::getInstance()->info("All required configurations are valid.");
+        LoggerManager::getInstance()->info("All required configurations are valid.");
         return true;
     }
 
@@ -126,7 +128,7 @@ class WpConfigHandler {
 
         foreach ($required_keys as $key) {
             if (empty(self::get_config($key))) {
-                Logger::getInstance()->error("Missing configuration value for: {$key}");
+                LoggerManager::getInstance()->error("Missing configuration value for: {$key}");
             }
         }
     }

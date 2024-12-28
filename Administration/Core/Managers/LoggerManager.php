@@ -1,19 +1,19 @@
 <?php
-namespace Administration\Components\Utilities;
+namespace Administration\Core\Managers;
 
 defined('ABSPATH') || exit;
 
 /**
  * Final Logger class adhering to Singleton pattern.
  */
-final class Logger {
+final class LoggerManager {
 
     private static $instance = null;
     private $logFile;
     private const MAX_FILE_SIZE = 5242880; // 5MB
     private const LEVELS = array('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL');
 
-    public static function getInstance(): Logger {
+    public static function getInstance(): LoggerManager {
         if (self::$instance === null) {
             self::$instance = new self();
         }
@@ -54,11 +54,12 @@ final class Logger {
 
         // Formater logbeskeden med fast bredde
         $logEntry = sprintf(
-            "[%-19s] %-8s %-120s | %s\n",
+            "[%-19s] %-8s %-120s | %s | %s\n",
             $timestamp,            // Tidsstempel
             strtoupper($level),    // Logniveau (DEBUG, INFO, etc.)
             $message,              // Selve logbeskeden
-            $backtrace             // Lokationen (fil og linje)
+            $backtrace,            // Lokationen (fil og linje)
+            $encodedContext        // Kontekst
         );
 
         if (file_exists($this->logFile) && filesize($this->logFile) >= self::MAX_FILE_SIZE) {

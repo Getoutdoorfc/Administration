@@ -1,5 +1,5 @@
 <?php
-namespace Administration\Components\AdminInterface;
+namespace Administration\Modules\Woocommerce\WoocommerceComponents\Stock;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Viser en lageroversigtsside i admin-området.
  *
- * @package Administration\Components\AdminInterface
+ * @package Administration\Modules\Woocommerce\WoocommerceComponents\Stock
  */
 class StockOverview {
 

@@ -1,3 +1,9 @@
+# Denne fil indeholder oversættelser for dit WordPress-plugin.
+# .po-filer (Portable Object) er menneskelæsbart format, der bruges til at definere oversættelser.
+# .mo-filer (Machine Object) er binære versioner af .po-filer, der bruges af WordPress til at indlæse oversættelser hurtigt.
+# For at generere en .mo-fil fra denne .po-fil, brug et værktøj som msgfmt:
+# msgfmt administration-da_DK.po -o administration-da_DK.mo
+# Placer .mo-filen i languages-mappen i dit plugin og indlæs den i dit plugin med load_plugin_textdomain-funktionen.
 
 msgid "Get Indoor"
 msgstr "Get Indoor"

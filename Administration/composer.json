@@ -2,7 +2,7 @@
   "name": "getoutdoor/administration",
   "description": "A WordPress plugin for integrating Microsoft services and calendar management.",
   "type": "project",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Sune E.",
@@ -26,9 +26,9 @@
   },
   "autoload": {
     "psr-4": {
+      "Administration\\Core\\": "Core/",
       "Administration\\Includes\\": "Includes/",
-      "Administration\\Modules\\": "Modules/",
-      "Administration\\Utilities\\": "Core/"
+      "Administration\\Modules\\": "Modules/"
     }
   },
   "autoload-dev": {
