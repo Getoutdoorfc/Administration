@@ -1,5 +1,5 @@
 <?php
-namespace Administration\Components\Utilities;
+namespace Administration\Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Hjælpeklasse til strengmanipulation.
  *
- * @package Administration\Components\Utilities
+ * @package Administration\Core
  */
 class StringHelper {
 

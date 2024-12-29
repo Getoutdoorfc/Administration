@@ -9,6 +9,11 @@ defined('ABSPATH') || exit;
  * Class AdminNotices
  *
  * Håndterer og viser administrative meddelelser i WordPress-dashboardet.
+ * 
+ * @package Administration\Modules\WordPress\WordPressUtilities
+ * @since WordPress 1.0.0
+ * @version 1.0.0
+ * 
  */
 class WordPressNotices {
 

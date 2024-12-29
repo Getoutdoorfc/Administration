@@ -1,5 +1,5 @@
 <?php
-namespace Administration\Core\GeneralHandlers;
+namespace Administration\Core\GlobalHandlers;
 
 defined('ABSPATH') || exit;
 
@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
  *
  * Håndterer opdateringer til .htaccess for at beskytte følsomme filer som wp-config.php.
  *
- * @package Administration\Core\GeneralHandlers
+ * @package Administration\Core\GlobalHandlers
  */
 class HtaccessHandler {
 

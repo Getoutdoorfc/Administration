@@ -1,5 +1,5 @@
 <?php
-namespace Administration\Components\Utilities;
+namespace Administration\Core;
 
 use DateTime;
 
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Hjælpeklasse til datofunktioner og formatering.
  *
- * @package Administration\Components\Utilities
+ * @package Administration\Core
  */
 class DateHelper {
 

@@ -2,7 +2,7 @@
 
 namespace Administration\Modules\WordPress\WordPressUtilities;
 
-use Administration\Core\GeneralUtilities\GeneralValidator;
+use Administration\Core\GlobalUtilities\GlobalValidatorUtilities;
 use Administration\Core\Managers\LoggerManager;
 
 defined('ABSPATH') || exit;
@@ -11,6 +11,11 @@ defined('ABSPATH') || exit;
  * Class WordPressValidator
  *
  * Håndterer validering relateret til admin-grænsefladen og input.
+ * 
+ * @package Administration\Modules\WordPress\WordPressUtilities
+ * @since WordPress 1.0.0
+ * @version 1.0.0
+ *   
  */
 class WordPressValidator {
 
@@ -60,7 +65,7 @@ class WordPressValidator {
         $errors = [];
 
         foreach ($fields as $field_name => $field_value) {
-            if (GeneralValidator::is_empty($field_value)) {
+            if (GlobalValidatorUtilities::is_empty($field_value)) {
                 $errors[] = sprintf(__('Field "%s" is required.', 'administration'), $field_name);
                 LoggerManager::getInstance()->error(sprintf('Validation error: Field "%s" is empty.', $field_name));
             } elseif (!is_string($field_value)) {

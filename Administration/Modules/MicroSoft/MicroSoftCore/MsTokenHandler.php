@@ -2,8 +2,8 @@
 
 namespace Administration\Modules\MicroSoft\MicroSoftCore;
 
-use Administration\Core\GeneralHandlers\WpConfigHandler;
-use Administration\Core\GeneralUtilities\GenneralCrypto;
+use Administration\Core\GlobalHandlers\WpConfigHandler;
+use Administration\Core\GlobalUtilities\GlobalCryptoUtilities;
 use Administration\Core\Managers\LoggerManager;
 
 if (!defined('ABSPATH')) {
@@ -32,6 +32,14 @@ if (!defined('ABSPATH')) {
  * - Crypto: Bruges til kryptering og dekryptering af tokens.
  * - ConfigHandler: Henter nødvendige konfigurationsdata som Client ID og Client Secret.
  * - Logger: Logger alle relevante handlinger og fejl.
+ * 
+ * @package Administration\Modules\MicroSoft\MicroSoftCore
+ * @since 1.0.0
+ * @version 1.0.0
+ * @see GenneralCrypto
+ * @see WpConfigHandler
+ * @see LoggerManager
+ * 
  */
 class MsTokenHandler {
 
@@ -53,8 +61,8 @@ class MsTokenHandler {
 
         try {
             // Krypter tokens
-            $encrypted_access_token = GenneralCrypto::encrypt_data($tokens['access_token']);
-            $encrypted_refresh_token = GenneralCrypto::encrypt_data($tokens['refresh_token']);
+            $encrypted_access_token = GlobalCryptoUtilities::encrypt_data($tokens['access_token']);
+            $encrypted_refresh_token = GlobalCryptoUtilities::encrypt_data($tokens['refresh_token']);
 
             // Gem tokens og deres udløbstidspunkt
             update_option('administration_microsoft_access_token', $encrypted_access_token);
@@ -97,7 +105,7 @@ class MsTokenHandler {
         }
 
         // Dekrypter access token
-        $decrypted_token = GenneralCrypto::decrypt_data($access_token);
+        $decrypted_token = GlobalCryptoUtilities::decrypt_data($access_token);
         if (!$decrypted_token) {
             LoggerManager::getInstance()->error('Decryption of access token failed.');
             return false;
@@ -120,7 +128,7 @@ class MsTokenHandler {
         }
 
         // Dekrypter refresh token
-        $refresh_token = GenneralCrypto::decrypt_data($refresh_token);
+        $refresh_token = GlobalCryptoUtilities::decrypt_data($refresh_token);
         if (!$refresh_token) {
             LoggerManager::getInstance()->error('Decryption of refresh token failed.');
             return false;

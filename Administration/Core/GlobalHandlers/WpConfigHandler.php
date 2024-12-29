@@ -1,8 +1,8 @@
 <?php
 
-namespace Administration\Core\GeneralHandlers;
+namespace Administration\Core\GlobalHandlers;
 
-use Administration\Core\GeneralUtilities\GenneralCrypto;
+use Administration\Core\GlobalUtilities\GlobalCryptoUtilities;
 use Administration\Core\Managers\LoggerManager;
 
 /**
@@ -16,6 +16,8 @@ use Administration\Core\Managers\LoggerManager;
  * Funktionalitet:
  * - Sikrer, at krypterede værdier kan hentes og gemmes sikkert.
  * - Logger alle relevante handlinger og fejl.
+ * 
+ * @package Administration\Core\GlobalHandlers
  */
 
 defined('ABSPATH') || exit;
@@ -31,9 +33,9 @@ class WpConfigHandler {
      */
     public static function get_config($key) {
         $config = [
-            'microsoft_client_id' => defined('MICROSOFT_CLIENT_ID') ? GenneralCrypto::decrypt_data(MICROSOFT_CLIENT_ID) : null,
-            'microsoft_client_secret' => defined('MICROSOFT_CLIENT_SECRET') ? GenneralCrypto::decrypt_data(MICROSOFT_CLIENT_SECRET) : null,
-            'microsoft_tenant_id' => defined('MICROSOFT_TENANT_ID') ? GenneralCrypto::decrypt_data(MICROSOFT_TENANT_ID) : null,
+            'microsoft_client_id' => defined('MICROSOFT_CLIENT_ID') ? GlobalCryptoUtilities::decrypt_data(MICROSOFT_CLIENT_ID) : null,
+            'microsoft_client_secret' => defined('MICROSOFT_CLIENT_SECRET') ? GlobalCryptoUtilities::decrypt_data(MICROSOFT_CLIENT_SECRET) : null,
+            'microsoft_tenant_id' => defined('MICROSOFT_TENANT_ID') ? GlobalCryptoUtilities::decrypt_data(MICROSOFT_TENANT_ID) : null,
             'secret_key' => defined('PLUGIN_SECRET_KEY') ? PLUGIN_SECRET_KEY : null,
             'encryption_salt' => defined('PLUGIN_ENCRYPTION_SALT') ? PLUGIN_ENCRYPTION_SALT : null,
         ];
@@ -74,7 +76,7 @@ class WpConfigHandler {
         }
 
         // Krypter værdien før lagring
-        $encrypted_value = GenneralCrypto::encrypt_data($value);
+        $encrypted_value = GlobalCryptoUtilities::encrypt_data($value);
         if ($encrypted_value === false) {
             LoggerManager::getInstance()->error("Failed to encrypt value for key: {$key}");
             return false;
@@ -101,35 +103,51 @@ class WpConfigHandler {
     }
 
     /**
+     * Gemmer credentials i wp-config.php.
+     *
+     * @param string $client_id Microsoft Client ID.
+     * @param string $client_secret Microsoft Client Secret.
+     * @param string $tenant_id Microsoft Tenant ID.
+     * @return void
+     * @throws \Exception Hvis der opstår en fejl under gemning.
+     */
+    public static function save_credentials($client_id, $client_secret, $tenant_id)
+    {
+        if (!self::set_constant('MICROSOFT_CLIENT_ID', $client_id) ||
+            !self::set_constant('MICROSOFT_CLIENT_SECRET', $client_secret) ||
+            !self::set_constant('MICROSOFT_TENANT_ID', $tenant_id)) {
+            throw new \Exception('Failed to save credentials to wp-config.php.');
+        }
+    }
+
+    /**
      * Validerer, at alle nødvendige konfigurationer er til stede.
      *
      * @return bool True, hvis alle nødvendige konfigurationer er valide; ellers false.
      */
     public static function validate(): bool {
         $required_keys = ['microsoft_client_id', 'microsoft_client_secret', 'microsoft_tenant_id', 'secret_key', 'encryption_salt'];
+        $all_valid = true;
 
         foreach ($required_keys as $key) {
             $value = self::get_config($key);
             if (empty($value)) {
                 LoggerManager::getInstance()->error("Missing required configuration: {$key}");
-                return false;
+                $all_valid = false;
             }
         }
 
-        LoggerManager::getInstance()->info("All required configurations are valid.");
-        return true;
+        if ($all_valid) {
+            LoggerManager::getInstance()->info("All required configurations are valid.");
+        }
+
+        return $all_valid;
     }
 
     /**
      * Logger manglende konfigurationsværdier.
      */
     public static function log_missing_config() {
-        $required_keys = ['microsoft_client_id', 'microsoft_client_secret', 'microsoft_tenant_id', 'secret_key', 'encryption_salt'];
-
-        foreach ($required_keys as $key) {
-            if (empty(self::get_config($key))) {
-                LoggerManager::getInstance()->error("Missing configuration value for: {$key}");
-            }
-        }
+        self::validate();
     }
 }

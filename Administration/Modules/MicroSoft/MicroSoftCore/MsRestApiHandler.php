@@ -2,7 +2,7 @@
 
 namespace Administration\Modules\MicroSoft\MicroSoftCore;
 
-use Administration\Core\GeneralHandlers\WpConfigHandler;
+use Administration\Core\GlobalHandlers\WpConfigHandler;
 use Administration\Core\Managers\LoggerManager;
 use Administration\Modules\MicroSoft\MicroSoftCore\MsTokenHandler;
 
@@ -12,6 +12,14 @@ defined('ABSPATH') || exit;
  * Class MsRestApiHandler
  *
  * Håndterer HTTP-anmodninger til Microsoft Graph API.
+ * 
+ * @package Administration\Modules\MicroSoft\MicroSoftCore
+ * @since 1.0.0
+ * @version 1.0.0
+ * @see MsTokenHandler
+ * @see WpConfigHandler
+ * @see LoggerManager
+ * 
  */
 class MsRestApiHandler {
 

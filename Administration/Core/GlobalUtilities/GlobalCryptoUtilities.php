@@ -1,6 +1,6 @@
 <?php
 
-namespace Administration\Core\GeneralUtilities;
+namespace Administration\Core\GlobalUtilities;
 
 use Administration\Core\Managers\LoggerManager;
 use Administration\Core\GeneralHandlers\WpConfigHandler;
@@ -23,8 +23,15 @@ defined('ABSPATH') || exit;
  *
  * Anbefaling:
  * Denne klasse er designet til generisk brug og kan genbruges til andre krypteringsbehov uden at være låst til Microsoft-integration.
+ *
+ * @package Administration\Core\GlobalUtilities
+ * @since 1.0.0
+ * @version 1.0.0
+ * @see WpConfigHandler
+ * @see LoggerManager
+ * 
  */
-class GenneralCrypto {
+class GlobalCryptoUtilities {
 
     /**
      * Genererer en sikker krypteringsnøgle baseret på konfigurationsindstillinger.

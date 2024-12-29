@@ -2,7 +2,7 @@
 
 namespace Administration\Modules\MicroSoft\MicroSoftUtilities;
 
-use Administration\Core\GeneralUtilities\GeneralValidator;
+use Administration\Core\GlobalUtilities\GlobalValidatorUtilities;
 use Administration\Core\Managers\LoggerManager;
 
 defined('ABSPATH') || exit;
@@ -27,17 +27,17 @@ class MicrosoftValidator {
         $errors = [];
 
         // Validate Client ID
-        if (GeneralValidator::is_empty($client_id) || !GeneralValidator::validate_format($client_id, '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/')) {
+        if (GlobalValidatorUtilities::is_empty($client_id) || !GlobalValidatorUtilities::validate_format($client_id, '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/')) {
             $errors[] = __('Client ID is invalid.', 'administration');
         }
 
         // Validate Client Secret
-        if (GeneralValidator::is_empty($client_secret) || strlen($client_secret) < 32) {
+        if (GlobalValidatorUtilities::is_empty($client_secret) || strlen($client_secret) < 32) {
             $errors[] = __('Client Secret is invalid.', 'administration');
         }
 
         // Validate Tenant ID
-        if (GeneralValidator::is_empty($tenant_id) || !GeneralValidator::validate_format($tenant_id, '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/')) {
+        if (GlobalValidatorUtilities::is_empty($tenant_id) || !GlobalValidatorUtilities::validate_format($tenant_id, '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/')) {
             $errors[] = __('Tenant ID is invalid.', 'administration');
         }
 

@@ -2,7 +2,7 @@
 namespace Administration\Modules\MicroSoft\MicroSoftCore;
 
 use Administration\Core\Managers\LoggerManager;
-use Administration\Core\GeneralHandlers\WpConfigHandler;
+use Administration\Core\GlobalHandlers\WpConfigHandler;
 
 defined('ABSPATH') || exit;
 
@@ -12,6 +12,11 @@ defined('ABSPATH') || exit;
  * Håndterer OAuth2-autentificering med Microsoft.
  *
  * @package Administration\Components\Integrations\MicrosoftGraph
+ * @since 1.0.0
+ * @version 1.0.0
+ * @see WpConfigHandler
+ * @see LoggerManager
+ * 
  */
 class MsAuth {
 
@@ -126,7 +131,7 @@ class MsAuth {
                 'expires_in' => $body['expires_in'] ?? 'UNKNOWN',
             ]);
 
-            $token_handler = new TokenHandler();
+            $token_handler = new MsTokenHandler();
             $token_handler->store_tokens($body);
 
             add_settings_error('administration_microsoft_options', 'token_success', __('Successfully authenticated with Microsoft.', 'administration'), 'updated');

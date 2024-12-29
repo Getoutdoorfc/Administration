@@ -1,5 +1,5 @@
 <?php
-namespace Administration\Core\GeneralHandlers;
+namespace Administration\Core\GlobalHandlers;
 
 defined('ABSPATH') || exit;
 
@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
  *
  * Håndterer REST API-anmodninger og endpoints.
  *
- * @package Administration\Core\GeneralHandlers
+ * @package Administration\Core\GlobalHandlers
  */
 class WpRestApiHandler {
 

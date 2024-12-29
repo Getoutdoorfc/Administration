@@ -23,7 +23,7 @@ final class LoggerManager {
     private function __construct() {
         $plugin_dir = plugin_dir_path(dirname(__FILE__, 2));
         $log_dir = trailingslashit($plugin_dir) . 'logs';
-        $this->logFile = trailingslashit($log_dir) . 'plugin-log.txt';
+        $this->logFile = trailingslashit($log_dir) . 'plugin-adm.log';
         $this->initializeLogFile($log_dir, $this->logFile);
     }
 

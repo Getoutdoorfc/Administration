@@ -14,7 +14,7 @@ define( 'ADMINISTRATION_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Brug nødvendige namespaces.
 use Administration\Includes\Main;
-use Administration\Components\Utilities\Logger;
+use Administration\Core\Managers\LoggerManager;
 
 /**
  * Initialiserer pluginet ved at køre den primære klasse.
@@ -25,16 +25,16 @@ function administration_initialize_plugin() {
             $plugin = new Main();
             $plugin->run();
         } catch ( Exception $e ) {
-            if ( class_exists( Logger::class ) ) {
-                Logger::getInstance()->error( 'Plugin initialization failed: ' . $e->getMessage(), [
+            if ( class_exists( LoggerManager::class ) ) {
+                LoggerManager::getInstance()->error( 'Plugin initialization failed: ' . $e->getMessage(), [
                     'trace' => $e->getTraceAsString(),
                 ]);
             }
         }
     } else {
         // Håndter fejl, hvis Main-klassen ikke findes.
-        if ( class_exists( Logger::class ) ) {
-            Logger::getInstance()->error( 'Plugin initialization failed: Main class not found.' );
+        if ( class_exists( LoggerManager::class ) ) {
+            LoggerManager::getInstance()->error( 'Plugin initialization failed: Main class not found.' );
         }
     }
 }

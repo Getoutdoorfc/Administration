@@ -3,7 +3,7 @@ namespace Administration\Modules\WordPress\WordPressPages;
 
 use Administration\Modules\WordPress\WordPressUtilities\WordPressNotices;
 use Administration\Modules\WordPress\WordPressPages\MicrosoftSetupGuide;
-use Administration\Core\GeneralHandlers\WpConfigHandler;
+use Administration\Core\GlobalHandlers\WpConfigHandler;
 use Administration\Core\Managers\loggerManager;
 
 defined('ABSPATH') || exit;
@@ -12,6 +12,15 @@ defined('ABSPATH') || exit;
  * Class MicrosoftSetupPage
  *
  * Renderer Microsoft Opsætningssiden i admin-panelet.
+ * 
+ * @package Administration\Modules\WordPress\WordPressPages
+ * @since WordPress 1.0.0
+ * @version 1.0.0
+ * @see MicrosoftSetupGuide
+ * @see WordPressNotices
+ * @see WpConfigHandler
+ * @see loggerManager
+ *  
  */
 class MicrosoftSetupPage {
 

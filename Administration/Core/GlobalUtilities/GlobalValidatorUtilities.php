@@ -1,6 +1,6 @@
 <?php
 
-namespace Administration\Core\GeneralUtilities;
+namespace Administration\Core\GlobalUtilities;
 
 use Administration\Core\Managers\LoggerManager;
 
@@ -10,8 +10,13 @@ defined('ABSPATH') || exit;
  * Class GeneralValidator
  *
  * Indeholder generelle validerings- og sanitiseringsfunktioner.
+ * 
+ * @package Administration\Core\GlobalUtilities
+ * @since 1.0.0
+ * @version 1.0.0
+ * @see LoggerManager
  */
-class GeneralValidator {
+class GlobalValidatorUtilities {
 
     /**
      * Generisk valideringsfunktion for formater.

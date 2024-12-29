@@ -2,9 +2,9 @@
 
 namespace Administration\Includes;
 
-use Administration\Components\AdminInterface\Menu;
 use Administration\Core\Managers\LoggerManager;
-use Administration\core\GeneralHandlers\WpRestApiHandler;
+use Administration\Core\GeneralHandlers\WpRestApiHandler;
+use Administration\Modules\WordPress\WordPressComponents\Menu;
 
 defined('ABSPATH') || exit;
 
@@ -18,32 +18,47 @@ class Main {
     public function __construct() {
         $this->logger = LoggerManager::getInstance();
         $this->loader = new Loader();
-    }
 
-    private function defineAdminHooks() {
-        $menu = new Menu();
-        $this->loader->add_action('admin_menu', $menu, 'register_menus');
-    }
-
-    private function definePublicHooks() {
-        // Placeholder for future public hooks
+        // Hook-registreringer
+        add_action('init', [$this, 'defineAdminHooks']);
+        add_action('init', [$this, 'definePublicHooks']);
+        add_action('rest_api_init', [$this, 'defineRestApiHooks']);
+        add_action('init', [$this, 'loadTextdomain']);
     }
 
     /**
-     * Define REST API Hooks
+     * Indlæser tekstdomænet for oversættelser.
      */
-    private function defineRestApiHooks() {
-        // Registrer REST API endpoints
-        $this->loader->add_action('rest_api_init', WpRestApiHandler::class, 'register_endpoints');
+    public function loadTextdomain() {
+        load_plugin_textdomain('administration', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     }
 
     /**
-     * Run the plugin initialization.
+     * Registrerer hooks til admin-miljøet.
+     */
+    public function defineAdminHooks() {
+        $menu = new Menu();
+        $this->loader->add_action('admin_menu', [$menu, 'register_menus'], 10);
+    }
+
+    /**
+     * Registrerer hooks til public-miljøet.
+     */
+    public function definePublicHooks() {
+        // Placeholder for public hooks
+    }
+
+    /**
+     * Registrerer REST API hooks.
+     */
+    public function defineRestApiHooks() {
+        $this->loader->add_action('rest_api_init', [WpRestApiHandler::class, 'register_endpoints'], 10);
+    }
+
+    /**
+     * Initialiserer og kører pluginet.
      */
     public function run() {
-        $this->defineAdminHooks();
-        $this->definePublicHooks();
-        $this->defineRestApiHooks(); // Tilføj REST API hooks
         $this->loader->run();
         $this->logger->info('Plugin initialized successfully.');
     }

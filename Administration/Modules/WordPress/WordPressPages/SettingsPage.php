@@ -8,6 +8,9 @@ defined( 'ABSPATH' ) || exit;
  * Viser indstillingssiden for pluginet i admin-grænsefladen.
  *
  * @package Administration\Modules\WordPress\WordPressPages
+ * @since WordPress 1.0.0
+ * @version 1.0.0
+ * 
  */
 
 ?>
